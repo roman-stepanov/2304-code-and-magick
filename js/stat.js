@@ -30,10 +30,12 @@ window.renderStatistics = function (ctx, names, times) {
   var columnIndent = 50;
 
   var getColumnColor = function (name) {
+    var saturation = Math.round(Math.random() * 100);
+
     if (name === 'Вы') {
       return 'rgba(255, 0, 0, 1)';
     } else {
-      return 'rgba(0, 0, ' + Math.round(Math.random() * 200 + 50) + ', 1)';
+      return 'hsl(240, ' + saturation + '%, 50%)';
     }
   };
 
