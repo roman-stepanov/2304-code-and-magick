@@ -10,11 +10,13 @@ window.renderStatistics = function (ctx, names, times) {
     var colorShadow = 'rgba(0, 0, 0, 0.7)';
     var offsetShadow = 10;
 
-    ctx.fillStyle = colorShadow;
-    ctx.fillRect(cloudXY[0] + offsetShadow, cloudXY[1] + offsetShadow, cloudWidth, cloudHeigth);
+    var drawRect = function (x, y, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, cloudWidth, cloudHeigth);
+    };
 
-    ctx.fillStyle = colorCloud;
-    ctx.fillRect(cloudXY[0], cloudXY[1], cloudWidth, cloudHeigth);
+    drawRect(cloudXY[0] + offsetShadow, cloudXY[1] + offsetShadow, colorShadow);
+    drawRect(cloudXY[0], cloudXY[1], colorCloud);
   };
 
   var drawText = function (x, y, text) {
@@ -46,6 +48,15 @@ window.renderStatistics = function (ctx, names, times) {
     return maxTime;
   };
 
+  var drawColumn = function (x, y, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, columnWidth, columnHeight);
+  };
+
+  var getSeconds = function (ms) {
+    return (ms / 1000).toFixed(1);
+  };
+
   var chartStep = chartHeight / getMaxTime();
   var chartXY = [cloudXY[0] + 50, cloudXY[1] + 80];
 
@@ -55,10 +66,14 @@ window.renderStatistics = function (ctx, names, times) {
 
   for (var i = 0; i < names.length; i++) {
     var columnHeight = chartStep * times[i];
+    var offsetX = chartXY[0] + ((columnWidth + columnIndent) * i);
+    var offsetY = chartXY[1] + chartHeight - columnHeight;
+    var offsetColumnValue = offsetY - 5;
+    var offsetColumnName = offsetY + columnHeight + 20;
 
-    ctx.fillStyle = getColumnColor(names[i]);
-    ctx.fillRect(chartXY[0] + ((columnWidth + columnIndent) * i), chartXY[1] + chartHeight - columnHeight, columnWidth, columnHeight);
-    drawText(chartXY[0] + ((columnWidth + columnIndent) * i), chartXY[1] + chartHeight - columnHeight - 5, times[i].toFixed(0));
-    drawText(chartXY[0] + ((columnWidth + columnIndent) * i), chartXY[1] + chartHeight + 20, names[i]);
+    drawColumn(offsetX, offsetY, getColumnColor(names[i]));
+    // drawText(offsetX, offsetColumnValue, times[i].toFixed(0));
+    drawText(offsetX, offsetColumnValue, getSeconds(times[i]));
+    drawText(offsetX, offsetColumnName, names[i]);
   }
 };
