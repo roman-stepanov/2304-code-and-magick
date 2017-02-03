@@ -1,5 +1,8 @@
 'use strict';
 
+var ENTER_KEY_CODE = 13;
+var ESC_KEY_CODE = 27;
+
 var setupWindow = document.querySelector('.setup');
 var setupOpen = document.querySelector('.setup-open');
 var setupClose = setupWindow.querySelector('.setup-close');
@@ -12,10 +15,54 @@ var fireballWrap = document.querySelector('.setup-fireball-wrap');
 
 var showSetup = function () {
   setupWindow.classList.remove('invisible');
+
+  setupClose.addEventListener('click', closeSetup);
+  setupClose.addEventListener('keydown', keydownSetupCloseENTER);
+  document.addEventListener('keydown', keydownSetupCloseESC);
+  wizardCoat.addEventListener('click', changeColorCoat);
+  wizardEyes.addEventListener('click', changeColorEyes);
+  fireballWrap.addEventListener('click', changeColorFireball);
+
+  setupOpen.setAttribute('aria-pressed', 'true');
 };
 
-var hideSetup = function () {
+var closeSetup = function () {
   setupWindow.classList.add('invisible');
+
+  setupClose.removeEventListener('click', closeSetup);
+  setupClose.removeEventListener('keydown', keydownSetupCloseENTER);
+  document.removeEventListener('keydown', keydownSetupCloseESC);
+  wizardCoat.removeEventListener('click', changeColorCoat);
+  wizardEyes.removeEventListener('click', changeColorEyes);
+  fireballWrap.removeEventListener('click', changeColorFireball);
+
+  setupOpen.setAttribute('aria-pressed', 'false');
+};
+
+var isPressENTER = function (evt) {
+  return evt.keyCode && evt.keyCode === ENTER_KEY_CODE;
+};
+
+var isPressESC = function (evt) {
+  return evt.keyCode && evt.keyCode === ESC_KEY_CODE;
+};
+
+var keydownSetupOpen = function (evt) {
+  if (isPressENTER(evt)) {
+    showSetup();
+  }
+};
+
+var keydownSetupCloseENTER = function (evt) {
+  if (isPressENTER(evt)) {
+    closeSetup();
+  }
+};
+
+var keydownSetupCloseESC = function (evt) {
+  if (isPressESC(evt)) {
+    closeSetup();
+  }
 };
 
 var validationSetup = function () {
@@ -65,8 +112,5 @@ var changeColorFireball = function () {
 };
 
 setupOpen.addEventListener('click', showSetup);
-setupClose.addEventListener('click', hideSetup);
+setupOpen.addEventListener('keydown', keydownSetupOpen);
 validationSetup();
-wizardCoat.addEventListener('click', changeColorCoat);
-wizardEyes.addEventListener('click', changeColorEyes);
-fireballWrap.addEventListener('click', changeColorFireball);
