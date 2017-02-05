@@ -19,9 +19,6 @@ var showSetup = function () {
   setupClose.addEventListener('click', closeSetup);
   setupClose.addEventListener('keydown', keydownSetupCloseENTER);
   document.addEventListener('keydown', keydownSetupCloseESC);
-  wizardCoat.addEventListener('click', changeColorCoat);
-  wizardEyes.addEventListener('click', changeColorEyes);
-  fireballWrap.addEventListener('click', changeColorFireball);
 
   setupOpen.setAttribute('aria-pressed', 'true');
 };
@@ -32,9 +29,6 @@ var closeSetup = function () {
   setupClose.removeEventListener('click', closeSetup);
   setupClose.removeEventListener('keydown', keydownSetupCloseENTER);
   document.removeEventListener('keydown', keydownSetupCloseESC);
-  wizardCoat.removeEventListener('click', changeColorCoat);
-  wizardEyes.removeEventListener('click', changeColorEyes);
-  fireballWrap.removeEventListener('click', changeColorFireball);
 
   setupOpen.setAttribute('aria-pressed', 'false');
 };
@@ -70,47 +64,35 @@ var validationSetup = function () {
   setupUserName.maxLength = 50;
 };
 
-var getRandomColor = function (colors) {
-  return colors[Math.floor(Math.random() * colors.length)];
-};
+var colorCoat = [
+  'rgb(101, 137, 164)',
+  'rgb(241, 43, 107)',
+  'rgb(146, 100, 161)',
+  'rgb(56, 159, 117)',
+  'rgb(215, 210, 55)',
+  'rgb(0, 0, 0)'
+];
 
-var changeColorCoat = function () {
-  var colorCoat = [
-    'rgb(101, 137, 164)',
-    'rgb(241, 43, 107)',
-    'rgb(146, 100, 161)',
-    'rgb(56, 159, 117)',
-    'rgb(215, 210, 55)',
-    'rgb(0, 0, 0)'
-  ];
 
-  wizardCoat.style.fill = getRandomColor(colorCoat);
-};
+var colorEyes = [
+  'black',
+  'red',
+  'blue',
+  'yellow',
+  'green'
+];
 
-var changeColorEyes = function () {
-  var colorEyes = [
-    'black',
-    'red',
-    'blue',
-    'yellow',
-    'green'
-  ];
-
-  wizardEyes.style.fill = getRandomColor(colorEyes);
-};
-
-var changeColorFireball = function () {
-  var colorFireball = [
-    '#ee4830',
-    '#30a8ee',
-    '#5ce6c0',
-    '#e848d5',
-    '#e6e848'
-  ];
-
-  fireballWrap.style.backgroundColor = getRandomColor(colorFireball);
-};
+var colorFireball = [
+  '#ee4830',
+  '#30a8ee',
+  '#5ce6c0',
+  '#e848d5',
+  '#e6e848'
+];
 
 setupOpen.addEventListener('click', showSetup);
 setupOpen.addEventListener('keydown', keydownSetupOpen);
 validationSetup();
+window.colorizeElement(wizardCoat, colorCoat, 'fill');
+window.colorizeElement(wizardEyes, colorEyes, 'fill');
+window.colorizeElement(fireballWrap, colorFireball, 'backgroundColor');
