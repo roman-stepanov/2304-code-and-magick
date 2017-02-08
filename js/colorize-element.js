@@ -1,16 +1,18 @@
 'use strict';
 
-window.colorizeElement = function (element, colors, property) {
+window.colorizeElement = (function () {
 
-  var colorizeRandomColor = function (evt) {
+  return function (element, colors, property) {
+    var colorizeRandomColor = function (evt) {
 
-    if (evt.type === 'click' || window.isPressENTER(evt)) {
-      var currentColor = element.style[property];
+      if (evt.type === 'click' || window.evtPressKey.isPressENTER(evt)) {
+        var currentColor = element.style[property];
 
-      element.style[property] = window.utils.getRandomElementExcept(colors, currentColor);
-    }
+        element.style[property] = window.utils.getRandomElementExcept(colors, currentColor);
+      }
+    };
+
+    element.addEventListener('click', colorizeRandomColor);
+    element.addEventListener('keydown', colorizeRandomColor);
   };
-
-  element.addEventListener('click', colorizeRandomColor);
-  element.addEventListener('keydown', colorizeRandomColor);
-};
+})();
