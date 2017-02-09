@@ -1,98 +1,87 @@
 'use strict';
 
-var ENTER_KEY_CODE = 13;
-var ESC_KEY_CODE = 27;
+(function () {
 
-var setupWindow = document.querySelector('.setup');
-var setupOpen = document.querySelector('.setup-open');
-var setupClose = setupWindow.querySelector('.setup-close');
-var setupUserName = setupWindow.querySelector('.setup-user-name');
+  var setupWindow = document.querySelector('.setup');
+  var setupOpen = document.querySelector('.setup-open');
+  var setupClose = setupWindow.querySelector('.setup-close');
+  var setupUserName = setupWindow.querySelector('.setup-user-name');
 
-var wizard = document.querySelector('#wizard');
-var wizardCoat = wizard.querySelector('#wizard-coat');
-var wizardEyes = wizard.querySelector('#wizard-eyes');
-var fireballWrap = document.querySelector('.setup-fireball-wrap');
+  var wizard = document.querySelector('#wizard');
+  var wizardCoat = wizard.querySelector('#wizard-coat');
+  var wizardEyes = wizard.querySelector('#wizard-eyes');
+  var fireballWrap = document.querySelector('.setup-fireball-wrap');
 
-var showSetup = function () {
-  setupWindow.classList.remove('invisible');
+  var colorCoat = [
+    'rgb(101, 137, 164)',
+    'rgb(241, 43, 107)',
+    'rgb(146, 100, 161)',
+    'rgb(56, 159, 117)',
+    'rgb(215, 210, 55)',
+    'rgb(0, 0, 0)'
+  ];
+  var colorEyes = [
+    'black',
+    'red',
+    'blue',
+    'yellow',
+    'green'
+  ];
+  var colorFireball = [
+    '#ee4830',
+    '#30a8ee',
+    '#5ce6c0',
+    '#e848d5',
+    '#e6e848'
+  ];
 
-  setupClose.addEventListener('click', closeSetup);
-  setupClose.addEventListener('keydown', keydownSetupCloseENTER);
-  document.addEventListener('keydown', keydownSetupCloseESC);
+  var showSetup = function () {
+    setupWindow.classList.remove('invisible');
 
-  setupOpen.setAttribute('aria-pressed', 'true');
-};
+    setupClose.addEventListener('click', closeSetupHandler);
+    setupClose.addEventListener('keydown', closeSetupHandler);
+    document.addEventListener('keydown', setupPressESC);
 
-var closeSetup = function () {
-  setupWindow.classList.add('invisible');
+    setupOpen.setAttribute('aria-pressed', 'true');
+  };
 
-  setupClose.removeEventListener('click', closeSetup);
-  setupClose.removeEventListener('keydown', keydownSetupCloseENTER);
-  document.removeEventListener('keydown', keydownSetupCloseESC);
+  var closeSetup = function () {
+    setupWindow.classList.add('invisible');
 
-  setupOpen.setAttribute('aria-pressed', 'false');
-};
+    setupClose.removeEventListener('click', closeSetupHandler);
+    setupClose.removeEventListener('keydown', closeSetupHandler);
+    document.removeEventListener('keydown', setupPressESC);
 
-var isPressENTER = function (evt) {
-  return evt.keyCode && evt.keyCode === ENTER_KEY_CODE;
-};
+    setupOpen.setAttribute('aria-pressed', 'false');
+  };
 
-var isPressESC = function (evt) {
-  return evt.keyCode && evt.keyCode === ESC_KEY_CODE;
-};
+  var showSetupHandler = function (evt) {
+    if (evt.type === 'click' || window.evtPressKey.isPressENTER(evt)) {
+      showSetup();
+    }
+  };
 
-var keydownSetupOpen = function (evt) {
-  if (isPressENTER(evt)) {
-    showSetup();
-  }
-};
+  var closeSetupHandler = function (evt) {
+    if (evt.type === 'click' || window.evtPressKey.isPressENTER(evt)) {
+      closeSetup();
+    }
+  };
 
-var keydownSetupCloseENTER = function (evt) {
-  if (isPressENTER(evt)) {
-    closeSetup();
-  }
-};
+  var setupPressESC = function (evt) {
+    if (!setupWindow.classList.contains('invisible') && window.evtPressKey.isPressESC(evt)) {
+      closeSetup();
+    }
+  };
 
-var keydownSetupCloseESC = function (evt) {
-  if (isPressESC(evt)) {
-    closeSetup();
-  }
-};
+  var validationSetup = function () {
+    setupUserName.required = true;
+    setupUserName.maxLength = 50;
+  };
 
-var validationSetup = function () {
-  setupUserName.required = true;
-  setupUserName.maxLength = 50;
-};
-
-var colorCoat = [
-  'rgb(101, 137, 164)',
-  'rgb(241, 43, 107)',
-  'rgb(146, 100, 161)',
-  'rgb(56, 159, 117)',
-  'rgb(215, 210, 55)',
-  'rgb(0, 0, 0)'
-];
-
-
-var colorEyes = [
-  'black',
-  'red',
-  'blue',
-  'yellow',
-  'green'
-];
-
-var colorFireball = [
-  '#ee4830',
-  '#30a8ee',
-  '#5ce6c0',
-  '#e848d5',
-  '#e6e848'
-];
-
-setupOpen.addEventListener('click', showSetup);
-setupOpen.addEventListener('keydown', keydownSetupOpen);
-validationSetup();
-window.colorizeElement(wizardCoat, colorCoat, 'fill');
-window.colorizeElement(wizardEyes, colorEyes, 'fill');
-window.colorizeElement(fireballWrap, colorFireball, 'backgroundColor');
+  setupOpen.addEventListener('click', showSetupHandler);
+  setupOpen.addEventListener('keydown', showSetupHandler);
+  validationSetup();
+  window.colorizeElement(wizardCoat, colorCoat, 'fill');
+  window.colorizeElement(wizardEyes, colorEyes, 'fill');
+  window.colorizeElement(fireballWrap, colorFireball, 'backgroundColor');
+})();
