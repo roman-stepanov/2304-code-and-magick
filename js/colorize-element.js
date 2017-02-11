@@ -2,17 +2,16 @@
 
 window.colorizeElement = (function () {
 
-  return function (element, colors, property) {
-    var colorizeRandomColor = function (evt) {
+  return function (element, colors, property, callback) {
 
-      if (evt.type === 'click' || window.evtPressKey.isPressENTER(evt)) {
-        var currentColor = element.style[property];
+    var currentColor = element.style[property];
 
-        element.style[property] = window.utils.getRandomElementExcept(colors, currentColor);
-      }
+    var getRandomColor = function () {
+      return window.utils.getRandomElementExcept(colors, currentColor);
     };
 
-    element.addEventListener('click', colorizeRandomColor);
-    element.addEventListener('keydown', colorizeRandomColor);
+    if (typeof callback === 'function') {
+      callback(element, getRandomColor(), property);
+    }
   };
 })();
